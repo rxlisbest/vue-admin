@@ -93,9 +93,9 @@
         <article class="tile is-child box">
           <h1 class="title" id="container">Bar Styles<a id="pickfiles">上传文件</a></h1>
           <div class="block styles-box">
-            <progress-bar :value="15" :max="100"></progress-bar>
+            <progress-bar :value="percent" :max="100"></progress-bar>
             <progress-bar :type="'primary'" :value="30" :max="100"></progress-bar>
-            <progress-bar :type="'info'" :value="45" :max="100"></progress-bar>
+            <progress-bar :type="'info'" :value="percent" :max="100"></progress-bar>
             <progress-bar :type="'success'" :value="60" :max="100"></progress-bar>
             <progress-bar :type="'warning'" :value="75" :max="100"></progress-bar>
             <progress-bar :type="'danger'" :value="90" :max="100"></progress-bar>
@@ -126,12 +126,14 @@ import qiniu from 'qiniu-js'
 
 export default {
   components: {
-    Chart
+    Chart,
+    ProgressBar
   },
 
   data () {
     return {
-      data: [300, 50, 100]
+      data: [300, 50, 100],
+      percent : 0
     }
   },
 
@@ -172,6 +174,7 @@ export default {
     loadData () {
       var token = this.$auth.token();
       console.log(token);
+      var _this = this;
       // const test = this.axios.create({
       //     baseURL: 'https://some-domain.com/api/',
       //     timeout: 1000,
@@ -230,6 +233,7 @@ export default {
               },
               'UploadProgress': function(up, file) {
                      // 每个文件上传时，处理相关的事情
+                _this.percent = file.percent;
               },
               'FileUploaded': function(up, file, info) {
                      // 每个文件上传成功后，处理相关的事情
@@ -252,7 +256,7 @@ export default {
               'Key': function(up, file) {
                   // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
                   // 该配置必须要在unique_names: false，save_key: false时才生效
-                  var key = "222";
+                  var key = new Date().getTime();
                   // do something with key here
                   return key
               }
