@@ -9,6 +9,8 @@ import router from './router'
 import store from './store'
 import * as filters from './filters'
 import { TOGGLE_SIDEBAR } from 'vuex-store/mutation-types'
+import { api } from './api'
+global.api = api
 
 Vue.router = router
 
@@ -30,7 +32,7 @@ Vue.use(VueAuth, {
 })
 // POST传参序列化
 axios.interceptors.request.use((config) => {
-  // console.log(config);
+  // console.log(config.url = 'test');
   // config.params.access_token = "-gF0w_e6ykO1WJbOeRS_AKeBzpiqqthlth9Vyo2s";
   return config;
 },(error) =>{
@@ -40,7 +42,6 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use((res) =>{
   if(res.status != '200'){
-    console.log(res)
     return res;
   }
   return res;
