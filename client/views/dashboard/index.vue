@@ -1,6 +1,42 @@
 <template>
   <div>
     <div class="tile is-ancestor">
+      <div class="tile is-parent is-12">
+        <article class="tile is-child box">
+          <h1 class="title">Controls</h1>
+          <div class="block">
+            <label class="label">Title</label>
+            <p class="control is-4">
+              <input class="input" type="text" placeholder="Text input">
+            </p>
+            <label class="label">Content</label>
+            <p class="control">
+              <textarea class="textarea" placeholder="Textarea"></textarea>
+            </p>
+            <p class="control">
+              <label class="radio">
+                <input type="radio" name="question">
+                Yes
+              </label>
+              <label class="radio">
+                <input type="radio" name="question">
+                No
+              </label>
+            </p>
+            <p class="control is-4">
+              <a id="pickfiles">上传文件</a>
+              <progress-bar :type="'info'" :value="percent" :max="100"></progress-bar>
+            </p>
+            <p class="control">
+              <button class="button is-primary">Submit</button>
+              <button class="button is-link">Cancel</button>
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="tile is-ancestor">
       <div class="tile is-parent">
         <article class="tile is-child box">
           <p class="title">One</p>

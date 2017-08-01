@@ -6,7 +6,7 @@
           <h1 class="title">Controls</h1>
           <div class="block">
             <label class="label">Name</label>
-            <p class="control">
+            <p class="control has-addons">
               <input class="input" type="text" placeholder="Text input">
             </p>
             <label class="label">Username</label>
@@ -147,89 +147,7 @@
       </div>
     </div>
 
-    <div class="tile is-ancestor">
-
-      <div class="tile is-parent is-3">
-        <article class="tile is-child box">
-          <h1 class="title">With Icon</h1>
-          <h2 class="subtitle"><a href="http://fontawesome.io/">Font Awesome Icons</a></h2>
-          <div class="block">
-            <p class="control has-icon">
-              <input class="input" type="email" placeholder="Email">
-              <span class="icon is-small">
-                <i class="fa fa-envelope"></i>
-              </span>
-            </p>
-            <p class="control has-icon">
-              <input class="input" type="password" placeholder="Password">
-              <span class="icon is-small">
-                <i class="fa fa-lock"></i>
-              </span>
-            </p>
-            <p class="control">
-              <button class="button is-success">
-                Login
-              </button>
-            </p>
-          </div>
-        </article>
-      </div>
-
-      <div class="tile is-parent">
-        <article class="tile is-child box">
-          <h1 class="title">Cleave.js</h1>
-          <h2 class="subtitle">Format your &lt;input/&gt; content when you are typing</h2>
-          <div class="columns">
-            <div class="column">
-              <div class="control">
-                <label class="label">Credit card number</label>
-                <cleave class="input" placeholder="Enter credit card number" :options="{ creditCard: true }"></cleave>
-              </div>
-              <div class="control">
-                <label class="label">Phone number</label>
-                <cleave class="input" type="tel" placeholder="Enter phone number" :options="{ phone: true, phoneRegionCode: 'cn' }"></cleave>
-              </div>
-              <div class="control">
-                <label class="label">Numeral</label>
-                <cleave class="input" placeholder="Enter numeral" :options="{ numeral: true, numeralThousandsGroupStyle: 'thousand' }"></cleave>
-              </div>
-            </div>
-            <div class="column">
-              <div class="control">
-                <label class="label">Date</label>
-                <cleave class="input" placeholder="YYYY/MM/DD" :value="'20160901'" :options="{ date: true, datePattern: ['Y', 'm', 'd'] }"></cleave>
-              </div>
-              <div class="control">
-                <cleave class="input" placeholder="MM/YY" :options="{ date: true, datePattern: ['m', 'y'] }"></cleave>
-              </div>
-              <div class="control">
-                <label class="label">Raw Value</label>
-                <cleave
-                   class="input"
-                   v-model="demo.value"
-                   @rawValueChanged="onRawValueChanged"
-                   placeholder="Enter phone number"
-                   :options="{ blocks: [0, 3, 3, 4], numericOnly: true, delimiters: ['(', ') ', '-'], maxLength: 14 }">
-                </cleave>
-              </div>
-            </div>
-            <div class="column">
-              <div class="control">
-                <label class="label">Custom options</label>
-                <cleave class="input" placeholder="Blocks: [4, 3, 3, 4]" :options="{ blocks: [4, 3, 3, 4], uppercase: true }"></cleave>
-              </div>
-              <div class="control">
-                <cleave class="input" placeholder="Delimiter: '·'" :options="{ delimiter: '·', blocks: [3, 3, 3, 3], uppercase: true }"></cleave>
-              </div>
-              <div class="control">
-                <cleave class="input" :options="{ prefix: 'PREFIX', delimiter: '-', blocks: [6, 4, 4, 4], uppercase: true }"></cleave>
-              </div>
-            </div>
-          </div>
-        </article>
-      </div>
-
-    </div>
+     
 
     <div class="tile is-ancestor">
       <div class="tile is-parent">
