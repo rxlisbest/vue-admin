@@ -22,33 +22,17 @@ Vue.use(VueAuth, {
     },
     response: function (res) {
       // Get Token from response body
+      // this.token('test', res.data.access_token);
+      console.log(res.data);
       return res.data.access_token
     }
   },
   http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
   router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
   loginData: { url: 'http://localhost:8000/api/v1/auth', fetchUser: false },
-  refreshData: { enabled: false }
+  logoutData: { url: 'http://localhost:8000/api/v1/auth', method: 'POST', redirect: '/', makeRequest: false},
+  refreshData: {url: 'http://localhost:8000/api/v1/auth', method: 'POST', enabled: true, interval: 30}
 })
-// POST传参序列化
-axios.interceptors.request.use((config) => {
-  // console.log(config.url = 'test');
-  // config.params.access_token = "-gF0w_e6ykO1WJbOeRS_AKeBzpiqqthlth9Vyo2s";
-  return config;
-},(error) =>{
-  alert("错误的传参");
-  return Promise.reject(error);
-});
-
-axios.interceptors.response.use((res) =>{
-  if(res.status != '200'){
-    return res;
-  }
-  return res;
-}, (error) => {
-  // alert("网络异常");
-  // return res;
-});
 
 Vue.use(NProgress)
 
@@ -78,4 +62,30 @@ const app = new Vue({
   nprogress,
   ...App
 })
+
+// POST传参序列化
+axios.interceptors.request.use((config) => {
+  // console.log(config.url = 'test');
+  // config.params.access_token = "-gF0w_e6ykO1WJbOeRS_AKeBzpiqqthlth9Vyo2s";
+  return Promise.resolve(config);
+},(error) =>{
+  alert("错误的传参");
+  return Promise.reject(error);
+});
+
+axios.interceptors.response.use((res) =>{
+  if(res.status != '200'){
+    return res;
+  }
+  return res;
+}, (error) => {
+  if(error.response.status == '401'){
+    app.$router.push('/login');
+  }
+  else{
+    console.log(error.response)
+  }
+  // alert("网络异常");
+  // return res;
+});
 export { app, router, store }

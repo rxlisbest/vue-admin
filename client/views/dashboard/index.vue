@@ -117,7 +117,17 @@ export default {
     },
     loadData () {
       var _this = this;
-
+      // this.$auth.refresh({
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   params: {
+      //     grant_type: 'refresh_token',
+      //     grant_type: _this.$auth.refresh,
+      //     grant_type: 'refresh_token',
+      //     grant_type: 'refresh_token',
+      //   }
+      // });
       new Promise(function(resolve, reject) {
         _this.axios({
           url: api.qiniu.token,
