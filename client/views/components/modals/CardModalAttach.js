@@ -4,7 +4,12 @@ export default {
       showModal: false,
       d1: {},
       d2: {},
-      d3: {}
+      d3: {},
+      card_modal: {
+        type: '',
+        title: '',
+        message: '',
+      }
     }
   },
 
@@ -12,7 +17,8 @@ export default {
     okModalMethod (){},
     closeModalMethod (){},
     cancelModalMethod (){},
-    showModalMethod(okModalMethod, d1, closeModalMethod, d2, cancelModalMethod, d3){
+    showModalMethod(config, okModalMethod, d1, closeModalMethod, d2, cancelModalMethod, d3){
+      this.card_modal = config;
       this.showModal = true;
       if(typeof okModalMethod == 'function'){
         this.okModalMethod = okModalMethod;

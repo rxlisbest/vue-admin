@@ -12,8 +12,8 @@ import tables from './tables'
 const state = {
   items: [
     {
-      name: 'Dashboard',
-      path: '/dashboard/:id',
+      name: '桌面',
+      path: '/dashboard',
       meta: {
         auth: true,
         icon: 'fa-tachometer',
@@ -29,12 +29,12 @@ const state = {
         icon: 'fa fa-video-camera',
         link: 'video/index.vue'
       },
-      component: lazyLoading('video/index', true)
+      component: lazyLoading('video', true)
     },
-    charts,
-    uifeatures,
-    components,
-    tables
+    // charts,
+    // uifeatures,
+    // components,
+    // tables
   ]
 }
 

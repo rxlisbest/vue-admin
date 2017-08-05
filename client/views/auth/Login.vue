@@ -65,15 +65,14 @@ export default {
         // },
         params: this.data.body,
         rememberMe: this.data.rememberMe,
-        redirect: {name: redirect ? redirect.from.name : 'Home'},
+        redirect: {name: redirect ? redirect.from.name : 'Dashboard'},
         success (res) {
-          this.$auth.token('test')
-          console.log('Auth Success')
-          console.log('Token: ' + this.$auth.token())
-          console.log(res)
+          // this.$auth.token('test')
+          // console.log('Auth Success')
+          // console.log('Token: ' + this.$auth.token())
+          // console.log(res)
         },
         error (err) {
-          console.log(this.data.body);
           if (err.response) {
             // The request was made, but the server responded with a status code
             // that falls out of the range of 2xx
@@ -83,9 +82,8 @@ export default {
             this.error = err.response.data
           } else {
             // Something happened in setting up the request that triggered an Error
-            console.log('Error', err.message)
+            // console.log('Error', err.message)
           }
-          console.log(err.config)
         }
       })
     }

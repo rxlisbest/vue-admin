@@ -14,14 +14,29 @@ export default new Router({
       component: require('../views/Home')
     },
     {
+      name: 'Article',
+      path: '/video/page/:id',
+      component: require('../views/video')
+    },
+    {
+      name: 'updateArticle',
+      path: '/video/update/:id',
+      component: require('../views/video/update')
+    },
+    {
       name: 'createArticle',
-      path: '/',
-      component: require('../views/Home')
+      path: '/video/create',
+      component: require('../views/video/update')
     },
     {
       name: 'Login',
       path: '/login',
       component: require('../views/auth/Login')
+    },
+    {
+      name: 'Dashboard',
+      path: '/dashboard',
+      component: require('../views/dashboard/index')
     },
     ...generateRoutesFromMenu(menuModule.state.items),
     {

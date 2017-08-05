@@ -80,7 +80,7 @@ axios.interceptors.response.use((res) =>{
 }, (error) => {
   if(error.response.status == '401'){
     app.$auth.logout({
-      redirect: 'Home',
+      // redirect: 'Home',
       makeRequest: false
       // params: {},
       // success: function () {},
