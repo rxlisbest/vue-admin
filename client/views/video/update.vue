@@ -12,10 +12,9 @@
             <p class="control is-4" id="container">
             <label class="label">上传</label>
               <a class="button is-warning" id="pickfiles">上传文件</a>
-              <a class="button is-danger modal-button" @click="openVideoModal">预览</a>
-              <br />
-              <progress-bar v-if="percent > 0 && percent < 100" :type="'warning'" :value="percent" :max="100"></progress-bar>
-              <span v-text="file.name"></span>
+              <a class="button is-danger modal-button btn-left-10" @click="openVideoModal">预览</a>
+              <progress-bar class="top" v-if="percent > 0 && percent < 100" :type="'warning'" :value="percent" :max="100"></progress-bar>
+              <span class="btn-left-10" v-text="file.name"></span>
             </p>
             <label class="label">描述</label>
             <p class="control">
@@ -336,4 +335,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .top {
+    margin-top: 10px;
+  }
+  .btn-left-10{
+    margin-left: 10px;
+  }
 </style>

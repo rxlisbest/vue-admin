@@ -34,7 +34,7 @@ export default {
           type: this.type,
           src: this.src
         }],
-        poster: "http://cdn.bucket1.ruixinglong.net/1501855592291",
+        poster: "",
       }
     }
   },

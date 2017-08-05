@@ -1,6 +1,6 @@
 <template>
   <card-modal :visible="visible" @close="close" :title="title" transition="zoom" @ok="ok()" @cancel="cancel()">
-    <div class="content has-text-centered"><i class="fa fa-exclamation-triangle fa-5x pull-left" :class="type" aria-hidden="true"></i><span class="message" v-text="message"></span></div>
+    <div class="content has-text-centered"><i class="fa fa-exclamation-triangle fa-5x pull-left" :class="type" aria-hidden="true"></i><span class="message1" v-text="message"></span></div>
   </card-modal>
 </template>
 
@@ -44,7 +44,7 @@ export default {
 }
 </script>
 <style type="text/css">
-  .message{
+  .message1{
     font-size: 20px;
     line-height: 60px;
   }
