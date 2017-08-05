@@ -5,13 +5,17 @@ let _host = localhostDev ? 'http://127.0.0.1:8000' : 'http://xxx.com';
 let httpUrl = {
 	articles: {
 	    'index': _host + '/api/v1/articles',
-	    'view': _host + '/api/v1/articles/view',
+	    'view': _host + '/api/v1/articles/',
 	    'create': _host + '/api/v1/articles',
-	    'update': _host + '/api/v1/articles/update',
-	    'delete': _host + '/api/v1/articles/delete'
+	    'update': _host + '/api/v1/articles/',
+	    'delete': _host + '/api/v1/articles/'
 	},
 	qiniu: {
 	    'token': _host + '/api/v1/qiniu/token',
+	},
+	file: {
+	    'view': _host + '/api/v1/files/',
+	    'create': _host + '/api/v1/files',
 	},
 };
 export const api = httpUrl

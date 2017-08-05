@@ -22,14 +22,14 @@ const state = {
       component: lazyLoading('dashboard', true)
     },
     {
-      name: '视频管理',
-      path: '/video',
+      name: 'Axios',
+      path: '/axiosDemo',
       meta: {
         auth: true,
         icon: 'fa fa-video-camera',
-        link: 'video/index.vue'
+        link: 'axios/index.vue'
       },
-      component: lazyLoading('video/index', true)
+      component: lazyLoading('axios', true)
     },
     charts,
     uifeatures,

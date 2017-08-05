@@ -23,7 +23,6 @@ Vue.use(VueAuth, {
     response: function (res) {
       // Get Token from response body
       // this.token('test', res.data.access_token);
-      console.log(res.data);
       return res.data.access_token
     }
   },
@@ -31,7 +30,7 @@ Vue.use(VueAuth, {
   router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
   loginData: { url: 'http://localhost:8000/api/v1/auth', fetchUser: false },
   logoutData: { url: 'http://localhost:8000/api/v1/auth', method: 'POST', redirect: '/', makeRequest: false},
-  refreshData: {url: 'http://localhost:8000/api/v1/auth', method: 'POST', enabled: true, interval: 30}
+  refreshData: {url: 'http://localhost:8000/api/v1/auth', method: 'POST', enabled: false, interval: 30}
 })
 
 Vue.use(NProgress)
@@ -80,6 +79,14 @@ axios.interceptors.response.use((res) =>{
   return res;
 }, (error) => {
   if(error.response.status == '401'){
+    app.$auth.logout({
+      redirect: 'Home',
+      makeRequest: false
+      // params: {},
+      // success: function () {},
+      // error: function () {},
+      // etc...
+    })
     app.$router.push('/login');
   }
   else{

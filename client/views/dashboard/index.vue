@@ -24,11 +24,12 @@
               </label>
             </p>
             <p class="control is-4" id="container">
-              <a id="pickfiles">上传文件</a>
-              <progress-bar v-if="" :type="'info'" :value="percent" :max="100"></progress-bar>
+              <a id="pickfiles">上传文件</a><span v-text="file.name"></span>
+              <a class="button is-primary is-large modal-button" @click="openVideoModal">预览</a>
+              <progress-bar v-if="percent > 0 && percent < 100" :type="'info'" :value="percent" :max="100"></progress-bar>
             </p>
             <p class="control">
-              <button class="button is-primary" v-on:click="addArticle()">Submit</button>
+              <button class="button is-primary" v-on:click="submit()">Submit</button>
               <button class="button is-link">Cancel</button>
             </p>
           </div>
@@ -48,12 +49,33 @@ import moxie from 'plupload/src/moxie'
 global.moxie = moxie
 import qiniu from 'qiniu-js'
 
+// message
+import Vue from 'vue'
+import VideoModal from '../components/modals/VideoModal'
+const VideoModalComponent = Vue.extend(VideoModal)
+import Message from 'vue-bulma-message'
+const MessageComponent = Vue.extend(Message)
+const openMessage = (propsData = {
+  title: '',
+  message: '',
+  type: '',
+  direction: '',
+  duration: 1500,
+  container: '.messages'
+}) => {
+  return new MessageComponent({
+    el: document.createElement('div'),
+    propsData
+  })
+}
+
 export default {
+
   components: {
     Chart,
     ProgressBar
   },
-
+  
   data () {
     return {
       data: [300, 50, 100],
@@ -62,44 +84,39 @@ export default {
         title: '',
         content: '',
         file_id: 0,
-      }
+        type: 1,
+      },
+      file: {
+        id: '',
+        type: '',
+        hash: '',
+        name: '',
+        size: '',
+        domain: '',
+        save_name: '',
+        transcode_id: '',
+        transcode_type: '',
+        transcode_name: '',
+        is_transcoded: '',
+      },
+      qiniu_domain: ''
     }
   },
-
-  computed: {
-    chartData () {
-      return {
-        labels: [
-          'Red',
-          'Blue',
-          'Yellow'
-        ],
-        datasets: [{
-          data: this.data,
-          backgroundColor: [
-            '#FF6384',
-            '#36A2EB',
-            '#FFCE56'
-          ]
-        }]
-      }
-    }
-  },
-
   mounted () {
     this.loadData();
-      // this.$auth.get('http://127.0.0.1:8000/api/v1/article/list').then(res => {
-      //     console.log('RES', res);
-      // });
-    // setInterval(() => {
-    //   // https://github.com/vuejs/vue/issues/2873
-    //   // Array.prototype.$set/$remove deprecated (use Vue.set or Array.prototype.splice instead)
-    //   this.data.forEach((item, i) => {
-    //     this.data.splice(i, 1, Math.ceil(Math.random() * 1000))
-    //   })
-    // }, 1024)
   },
+
   methods: {
+    submit(){
+      let id = Number(this.$route.params.id);
+      if(id && !isNaN(id)){
+        this.updateArticle();
+      }
+      else{
+        this.addArticle();
+      }
+    },
+
     addArticle (){
       this.axios({
         url: api.articles.create,
@@ -108,56 +125,85 @@ export default {
           title: this.article.title,
           content: this.article.content,
           file_id: this.article.file_id,
+          type: this.article.type,
         }
       }).then((response) => {
         // console.log(response);
       }).catch((error) => {
-        // console.log(error)
+
       })
     },
+
+    updateArticle (){
+      let id = this.$route.params.id;
+      this.axios({
+        url: api.articles.update + id,
+        method: "put",
+        data : {
+          title: this.article.title,
+          content: this.article.content,
+          file_id: this.article.file_id,
+          type: this.article.type,
+        }
+      }).then((response) => {
+        // console.log(response);
+      }).catch((error) => {
+
+      })
+    },
+
     loadData () {
-      var _this = this;
-      // this.$auth.refresh({
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   params: {
-      //     grant_type: 'refresh_token',
-      //     grant_type: _this.$auth.refresh,
-      //     grant_type: 'refresh_token',
-      //     grant_type: 'refresh_token',
-      //   }
-      // });
+      let _this = this;
+      let id = Number(this.$route.params.id);
+      if(isNaN(id)){
+        return false;
+      }
+      this.axios({
+        url: api.articles.view + id,
+        method: "get",
+      }).then((response) => {
+        if(response.status == 200){
+          var data = response.data;
+          _this.article = data;
+          if(data.file_id > 0){
+            _this.axios({
+              url: api.file.view + data.file_id,
+              method: "get",
+            }).then((response) => {
+              if(response.status == 200){
+                var data = response.data;
+                _this.file = data;
+              }
+            }).catch((error) => {
+              // openMessage({message: error, type: 'error', duration: 0, showCloseButton: true})
+            })
+          }
+        }
+      }).catch((error) => {
+
+      })
+      this.loadQiniu();
+    },
+
+    loadQiniu (){
+      let _this = this;
       new Promise(function(resolve, reject) {
         _this.axios({
           url: api.qiniu.token,
           method: "get"
         }).then((response) => {
-          var uptoken = response.data.uptoken
-          resolve(uptoken);
+          _this.qiniu_domain = response.data.domain;
+          resolve(response.data);
         }).catch((error) => {
           reject(error);
         })
-      }).then(function(uptoken){
+      }).then(function(res){
         var uploader = Qiniu.uploader({
             runtimes: 'html5,flash,html4',      // 上传模式，依次退化
             browse_button: 'pickfiles',         // 上传选择的点选按钮，必需
-            // 在初始化时，uptoken，uptoken_url，uptoken_func三个参数中必须有一个被设置
-            // 切如果提供了多个，其优先级为uptoken > uptoken_url > uptoken_func
-            // 其中uptoken是直接提供上传凭证，uptoken_url是提供了获取上传凭证的地址，如果需要定制获取uptoken的过程则可以设置uptoken_func
-            uptoken : uptoken, // uptoken是上传凭证，由其他程序生成
-            // uptoken_url: api.qiniu.token,         // Ajax请求uptoken的Url，强烈建议设置（服务端提供）
-            // uptoken_func: function(){    // 在需要获取uptoken时，该方法会被调用
-            //    // do something
-
-            //   return uptoken;
-            // },
+            uptoken : res.uptoken, // uptoken是上传凭证，由其他程序生成
             get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
-            // downtoken_url: '/downtoken',
-            // Ajax请求downToken的Url，私有空间时使用，JS-SDK将向该地址POST文件的key和domain，服务端返回的JSON必须包含url字段，url值为该文件的下载地址
-            // unique_names: true,              // 默认false，key为文件名。若开启该选项，JS-SDK会为每个文件自动生成key（文件名）
-            // save_key: true,                  // 默认false。若在服务端生成uptoken的上传策略中指定了sava_key，则开启，SDK在前端将不对key进行任何处理
-            domain: 'http://cdn.bucket1.ruixinglong.net/',     // bucket域名，下载资源时用到，必需
+            domain: res.domain,     // bucket域名，下载资源时用到，必需
             container: 'container',             // 上传区域DOM ID，默认是browser_button的父元素
             max_file_size: '100mb',             // 最大文件体积限制
             flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
@@ -166,19 +212,6 @@ export default {
             drop_element: 'container',          // 拖曳上传区域元素的ID，拖曳文件或文件夹后可触发上传
             chunk_size: '4mb',                  // 分块上传时，每块的体积
             auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
-            //x_vars : {
-            //    查看自定义变量
-            //    'time' : function(up,file) {
-            //        var time = (new Date()).getTime();
-                      // do something with 'time'
-            //        return time;
-            //    },
-            //    'size' : function(up,file) {
-            //        var size = file.size;
-                      // do something with 'size'
-            //        return size;
-            //    }
-            //},
             init: {
                 'FilesAdded': function(up, files) {
                     plupload.each(files, function(file) {
@@ -193,16 +226,27 @@ export default {
                   _this.percent = file.percent;
                 },
                 'FileUploaded': function(up, file, info) {
-                       // 每个文件上传成功后，处理相关的事情
-                       // 其中info是文件上传成功后，服务端返回的json，形式如：
-                       // {
-                       //    "hash": "Fh8xVqod2MQ1mocfI4S4KpRL6D98",
-                       //    "key": "gogopher.jpg"
-                       //  }
-                       // 查看简单反馈
-                       // var domain = up.getOption('domain');
-                       // var res = parseJSON(info);
-                       // var sourceLink = domain +"/"+ res.key; 获取上传成功后的文件的Url
+                  eval("info = " + info.response);
+                  _this.axios({
+                    url: api.file.create,
+                    method: "post",
+                    data : {
+                      hash: info.hash,
+                      name: file.name,
+                      type: file.type,
+                      size: file.size,
+                      domain: _this.qiniu_domain,
+                      save_name: info.key,
+                      is_transcoded: 0
+                    }
+                  }).then((response) => {
+                    if(response.status == 200){
+                      _this.article.file_id = response.data.id;
+                      _this.file.name = file.name;
+                    }
+                  }).catch((error) => {
+                    openMessage({message: error, type: 'error', duration: 0, showCloseButton: true })
+                  })
                 },
                 'Error': function(up, err, errTip) {
                        //上传出错时，处理相关的事情
@@ -211,35 +255,57 @@ export default {
                        //队列文件处理完毕后，处理相关的事情
                 },
                 'Key': function(up, file) {
-                    // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
-                    // 该配置必须要在unique_names: false，save_key: false时才生效
                     var key = new Date().getTime();
-                    // do something with key here
                     return key
                 }
             }
         });
       }).catch(function(error){
-        console.log(error)
-      });
-      
 
-      this.axios({
-        url: api.articles.index,
-        // transformResponse: [(data) => {
-        //   return JSON.parse(data.replace(/T00:00:00/g, ''))
-        // }],
+      });
+    },
+    openVideoModal(){
+      let _this = this;
+      if(!_this.file.id){
+        openMessage({message: '预览文件为空', type: 'warning', duration: 2000, showCloseButton: true})
+        return false;
+      }
+      _this.axios({
+        url: api.file.view + _this.file.id,
         method: "get",
-        params: {
-          // access_token : token
-        },
-        data : {
-          test : 123
-        }
       }).then((response) => {
-        // console.log(response);
+        if(response.status == 200){
+          let data = response.data;
+          _this.file = data;
+          let src = '';
+          let type = '';
+          if(_this.file.transcode_id != null){
+            if(_this.file.is_transcoded == 1){
+              src = _this.file.domain + _this.file.transcode_name;
+              type = _this.file.transcode_type;
+            }
+          }
+          else{
+            src = _this.file.domain + _this.file.save_name;
+            type = _this.file.type;
+          }
+          if(src && type){
+            let propsData = {
+                  visible: true,
+                  src: src,
+                  type: type,
+                };
+            new VideoModalComponent({
+              el: document.createElement('div'),
+              propsData
+            })
+          }
+          else{
+            openMessage({message: '视频转码中...', type: 'warning', duration: 2000, showCloseButton: true})
+          }
+        }
       }).catch((error) => {
-        // console.log(error)
+
       })
     }
   }

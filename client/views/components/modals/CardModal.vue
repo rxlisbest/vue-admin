@@ -1,7 +1,6 @@
 <template>
-  <card-modal :visible="visible" @close="close" :title="title" transition="zoom">
+  <card-modal :visible="visible" @close="close" :title="title" transition="zoom" @ok="ok()" @cancel="cancel()">
     <div class="content has-text-centered"><img :src="src" height="120" alt="Vue Admin"></div>
-    <a @click="open(url)">Vue Admin on GitHub</a>
   </card-modal>
 </template>
 
@@ -26,13 +25,19 @@ export default {
   },
 
   methods: {
+    ok(){
+      this.$emit('ok')
+    },
     open (url) {
       window.open(url)
     },
-
     close () {
       this.$emit('close')
+    },
+    cancel(){
+      this.$emit('cancel')
     }
+
   }
 }
 </script>

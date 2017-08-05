@@ -6,7 +6,7 @@
           <h1 class="title">Styles</h1>
           <div class="block styles-box">
 
-            <message :title="'Normal'" :direction="'down'" :message="'Lorem ipsum dolor sit amet, consectetur adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit'" :duration="0"></message>
+            <message :title="'Normal'" :direction="'down'" :message="'确定要删除这条记录'" :duration="0"></message>
 
             <message :title="'Primary'" :type="'primary'" :direction="'right'" :message="'Primar lorem ipsum dolor sit amet, consectetur adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit'" :duration="0"></message>
 
@@ -66,8 +66,8 @@ export default {
 
   mounted () {
     openMessage({
-      message: 'Success lorem ipsum dolor sit amet, consectetur adipiscing elit lorem ipsum dolor sit amet, consectetur adipiscing elit',
-      type: 'success',
+      message: '确定要删除这条记录',
+      type: 'warning',
       duration: 0,
       showCloseButton: true
     })

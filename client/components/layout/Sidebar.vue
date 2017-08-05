@@ -1,5 +1,5 @@
 <template>
-  <aside class="menu app-sidebar animated" :class="{ slideInLeft: show, slideOutLeft: !show }">
+  <aside class="menu app-sidebar animated" :class="{ slideInLeft: show || !is_login, slideOutLeft: !show || is_login }">
     <p class="menu-label">
       General
     </p>
@@ -49,11 +49,15 @@ export default {
 
   data () {
     return {
+      is_login: false,
       isReady: false
     }
   },
 
   mounted () {
+    if(this.$route.name == 'Login'){
+      this.is_login = true;
+    }
     let route = this.$route
     if (route.name) {
       this.isReady = true
@@ -124,6 +128,12 @@ export default {
 
   watch: {
     $route (route) {
+      if(route.name == 'Login'){
+        this.is_login = true;
+      }
+      else{
+        this.is_login = false;
+      }
       this.isReady = true
       this.shouldExpandMatchItem(route)
     }

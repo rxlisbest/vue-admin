@@ -14,6 +14,11 @@ export default new Router({
       component: require('../views/Home')
     },
     {
+      name: 'createArticle',
+      path: '/',
+      component: require('../views/Home')
+    },
+    {
       name: 'Login',
       path: '/login',
       component: require('../views/auth/Login')

@@ -19,10 +19,13 @@
         <article class="tile is-child box">
           <h1 class="title">Card</h1>
           <a class="button is-primary is-large modal-button" @click="openModalCard()">Launch modal card</a>
+          
         </article>
       </div>
     </div>
-    <modal :visible="showModal" @close="closeModalBasic"></modal>
+    <card-modal :visible="showModal" @close="close" transition="zoom" v-on:ok="ok()">
+
+    </card-modal>
   </div>
 </template>
 
@@ -34,9 +37,11 @@ import CardModal from './modals/CardModal'
 
 const ImageModalComponent = Vue.extend(ImageModal)
 const CardModalComponent = Vue.extend(CardModal)
+console.log(CardModalComponent);
 
 const openImageModal = (propsData = {
-  visible: true
+  visible: true,
+  src: 'https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm'
 }) => {
   return new ImageModalComponent({
     el: document.createElement('div'),
@@ -55,7 +60,8 @@ const openCardModal = (propsData = {
 
 export default {
   components: {
-    Modal
+    Modal,
+    CardModal
   },
 
   data () {
@@ -67,6 +73,15 @@ export default {
   },
 
   methods: {
+    ok (){
+      alert(23)
+    },
+    open (url) {
+      window.open(url)
+    },
+    close () {
+      this.$emit('close')
+    },
     openModalBasic () {
       this.showModal = true
     },
@@ -82,8 +97,8 @@ export default {
 
     openModalCard () {
       const cardModal = this.cardModal || (this.cardModal = openCardModal({
-        title: 'Modal title',
-        url: this.$store.state.pkg.homepage
+        title: 'test',
+        url: this.$store.state.pkg.homepage,
       }))
       cardModal.$children[0].active()
     }

@@ -54,19 +54,15 @@ export default {
     }
   },
   mounted () {
-    if (this.$auth.redirect()) {
-      console.log('Redirect from: ' + this.$auth.redirect().from.name)
-    }
     // Can set query parameter here for auth redirect or just do it silently in login redirect.
   },
   methods: {
     login () {
       var redirect = this.$auth.redirect()
-      console.log(redirect)
       this.$auth.login({
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        // headers: {
+        //   'Content-Type': 'application/json'
+        // },
         params: this.data.body,
         rememberMe: this.data.rememberMe,
         redirect: {name: redirect ? redirect.from.name : 'Home'},
