@@ -61,7 +61,7 @@ export default {
       articles: {
         models: [],
         pages:{
-          totalPage: 0,
+          totalPage: 1,
           page: 0
         }
       },
