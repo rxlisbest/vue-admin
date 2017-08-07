@@ -109,10 +109,10 @@ export default {
         openMessage({message: '标题不能为空', type: 'danger', duration: 1500, showCloseButton: true})
         return false;
       }
-      // if(!file_id){
-      //   openMessage({message: '视频不能为空', type: 'danger', duration: 1500, showCloseButton: true})
-      //   return false;
-      // }
+      if(!file_id){
+        openMessage({message: '视频不能为空', type: 'danger', duration: 1500, showCloseButton: true})
+        return false;
+      }
       let id = Number(this.$route.params.id);
       if(id && !isNaN(id)){
         this.updateArticle();
