@@ -34,7 +34,7 @@
               </tr>
             </tbody>
           </table>
-          <pagination :pageNo="articles.pages.totalPage" :cur="articles.pages.page + 1" @requestData="requestData"></pagination>
+          <pagination v-if="showPagination" :pageNo="articles.pages.totalPage" :cur="articles.pages.page + 1" @requestData="requestData"></pagination>
           <!-- <a v-for="v in Array.from(new Array(articles.pages.totalPage), (v,i) => { return i})" :key="v" @click="page(v)">{{v + 1}}</a> -->
         </article>
       </div>
@@ -65,6 +65,7 @@ export default {
           page: 0
         }
       },
+      showPagination: false,
       delete_article_modal: {
         type: 'warning',
         title: '提示信息',
@@ -89,6 +90,7 @@ export default {
     },
     loadData () {
       let _this = this;
+      _this.showPagination = false;
       _this.axios({
         url: api.articles.index,
         method: "get",
@@ -97,15 +99,10 @@ export default {
         }
       }).then((response) => {
         _this.articles = response.data;
-        _this.currentPage = response.data.pages.page + 1;
-        _this.pageNo = response.data.pages.totalPage;
+        _this.showPagination = true;
       }).catch((error) => {
-        console.log(error)
+        // console.log(error)
       })
-    },
-    page(p) {
-      this.articles.pages.page = p;
-      this.loadData();
     },
     deleteArticle (obj) {
       let _this = this;
@@ -113,9 +110,10 @@ export default {
         url: api.articles.delete + obj.id,
         method: "delete",
       }).then((response) => {
+        _this.articles.pages.page = 0;
         _this.loadData();
       }).catch((error) => {
-        console.log(error)
+        // console.log(error)
       })
     }
   }
