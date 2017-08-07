@@ -28,9 +28,9 @@ Vue.use(VueAuth, {
   },
   http: require('@websanova/vue-auth/drivers/http/axios.1.x.js'),
   router: require('@websanova/vue-auth/drivers/router/vue-router.2.x.js'),
-  loginData: { url: 'http://localhost:8000/api/v1/auth', fetchUser: false },
-  logoutData: { url: 'http://localhost:8000/api/v1/auth', method: 'POST', redirect: '/', makeRequest: false},
-  refreshData: {url: 'http://localhost:8000/api/v1/auth', method: 'POST', enabled: false, interval: 30}
+  loginData: { url: api.auth.index, fetchUser: false },
+  logoutData: { url: api.auth.index, method: 'POST', redirect: '/', makeRequest: false},
+  refreshData: {url: api.auth.index, method: 'POST', enabled: false, interval: 30}
 })
 
 Vue.use(NProgress)
@@ -80,17 +80,17 @@ axios.interceptors.response.use((res) =>{
 }, (error) => {
   if(error.response.status == '401'){
     app.$auth.logout({
-      // redirect: 'Home',
+      // redirect: 'Dashboard',
       makeRequest: false
       // params: {},
       // success: function () {},
       // error: function () {},
       // etc...
     })
-    app.$router.push('/login');
+    app.$router.push('/dashboard');
   }
   else{
-    console.log(error.response)
+    return error;
   }
   // alert("网络异常");
   // return res;

@@ -67,19 +67,45 @@ export default {
       lineAreaOptions: {
         low: 0,
         showArea: true
-      }
+      },
+      is_mobile: false
     }
   },
 
+  beforeMount () {
+    // 判断是否是移动设备
+    const { body } = document
+    const WIDTH = 768
+    const RATIO = 3
+
+    const handler = () => {
+      if (!document.hidden) {
+        let rect = body.getBoundingClientRect();
+        let isMobile = rect.width - RATIO < WIDTH;
+        this.is_mobile = isMobile;
+      }
+    }
+
+    document.addEventListener('visibilitychange', handler)
+    window.addEventListener('DOMContentLoaded', handler)
+    window.addEventListener('resize', handler)
+  },
+  watch: {
+    is_mobile: 'loadData'
+  },
   methods: {
     loadData () {
       let _this = this;
+      let type = 'month_storage';
+      if(_this.is_mobile){
+        type = 'week_storage';
+      }
       _this.chartistShow = false;
       _this.axios({
         url: api.statistic.index,
         method: "get",
         params: {
-          type: 'month_storage',
+          type: type,
         }
       }).then((response) => {
         _this.lineAreaData.labels = response.data.labels;

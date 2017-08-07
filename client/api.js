@@ -20,5 +20,8 @@ let httpUrl = {
 	statistic: {
 	    'index': _host + '/api/v1/statistics',
 	},
+	auth: {
+	    'index': _host + '/api/v1/auth',
+	},
 };
 export const api = httpUrl

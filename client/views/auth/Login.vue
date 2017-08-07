@@ -36,6 +36,23 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import Message from 'vue-bulma-message'
+const MessageComponent = Vue.extend(Message)
+const openMessage = (propsData = {
+  title: '',
+  message: '',
+  type: '',
+  direction: '',
+  duration: 1500,
+  container: '.messages'
+}) => {
+  return new MessageComponent({
+    el: document.createElement('div'),
+    propsData
+  })
+}
+
 export default {
 
   data () {
@@ -58,6 +75,7 @@ export default {
   },
   methods: {
     login () {
+      var _this = this;
       var redirect = this.$auth.redirect()
       this.$auth.login({
         // headers: {
@@ -65,25 +83,22 @@ export default {
         // },
         params: this.data.body,
         rememberMe: this.data.rememberMe,
-        redirect: {name: redirect ? redirect.from.name : 'Dashboard'},
+        redirect: false,
         success (res) {
           // this.$auth.token('test')
           // console.log('Auth Success')
           // console.log('Token: ' + this.$auth.token())
           // console.log(res)
+          if(res.status == 200){
+            _this.$router.push('/dashboard');
+          }
+          else{
+            openMessage({message: res.response.data.message, type: 'danger', duration: 1500, showCloseButton: true})
+            return false;
+          }
         },
         error (err) {
-          if (err.response) {
-            // The request was made, but the server responded with a status code
-            // that falls out of the range of 2xx
-            // console.log(err.response.status)
-            // console.log(err.response.data)
-            // console.log(err.response.headers)
-            this.error = err.response.data
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            // console.log('Error', err.message)
-          }
+          // do nothing
         }
       })
     }
