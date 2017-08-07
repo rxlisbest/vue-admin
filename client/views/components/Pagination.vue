@@ -5,7 +5,7 @@
     <span v-if="preClipped" class="page-index">...</span>
     <span v-for="index in pages" class="page-index" :class="{'active': current==index}" @click="goPage(index)">{{index}}</span>
     <span v-if="backClipped" class="page-index">...</span>
-    <span class="page-index" :class="{'active': current==pageNo}" @click="goPage(pageNo)">{{pageNo}}</span>
+    <span v-if="pageNo > 0" class="page-index" :class="{'active': current==pageNo}" @click="goPage(pageNo)">{{pageNo}}</span>
     <button class="btn btn-pager" :disabled="this.current == pageNo" @click="nextPage">下一页</button>
   </div>
 </template>
@@ -83,11 +83,12 @@
           }
         } else {
           this.backClipped = false
-          for (let i = (this.current + 1); i < this.pageNo; i++) {
+          for (let i = (this.current + 1); i < this.pageNo; ++i) {
             ret.push(i)
           }
         }
         // 返回整个页码组
+        console.log(ret);
         return ret
       }
     }

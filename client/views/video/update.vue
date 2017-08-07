@@ -267,7 +267,7 @@ export default {
                       _this.file.id = response.data.id;
                     }
                   }).catch((error) => {
-                    openMessage({message: error, type: 'error', duration: 0, showCloseButton: true })
+                    // openMessage({message: error, type: 'error', duration: 0, showCloseButton: true })
                   })
                 },
                 'Error': function(up, err, errTip) {
