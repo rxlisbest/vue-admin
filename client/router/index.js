@@ -33,11 +33,11 @@ export default new Router({
       path: '/login',
       component: require('../views/auth/Login')
     },
-    {
-      name: 'Dashboard',
-      path: '/dashboard',
-      component: require('../views/dashboard/index')
-    },
+    // {
+    //   name: 'Dashboard',
+    //   path: '/dashboard',
+    //   component: require('../views/dashboard/index')
+    // },
     ...generateRoutesFromMenu(menuModule.state.items),
     {
       path: '*',

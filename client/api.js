@@ -17,5 +17,8 @@ let httpUrl = {
 	    'view': _host + '/api/v1/files/',
 	    'create': _host + '/api/v1/files',
 	},
+	statistic: {
+	    'index': _host + '/api/v1/statistics',
+	},
 };
 export const api = httpUrl
