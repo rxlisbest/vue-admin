@@ -68,7 +68,7 @@ export default {
         low: 0,
         showArea: true
       },
-      is_mobile: false
+      is_mobile: ''
     }
   },
 
@@ -85,7 +85,7 @@ export default {
         this.is_mobile = isMobile;
       }
     }
-
+    handler();
     document.addEventListener('visibilitychange', handler)
     window.addEventListener('DOMContentLoaded', handler)
     window.addEventListener('resize', handler)
@@ -122,7 +122,7 @@ export default {
   },
 
   mounted () {
-    this.loadData();
+    // this.loadData();
   }
 }
 </script>
